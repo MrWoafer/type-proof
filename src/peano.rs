@@ -165,16 +165,9 @@ where
 
 #[cfg(test)]
 mod tests {
+    use crate::type_utils::assert_type_eq;
+
     use super::*;
-
-    trait TypeEq<T> {}
-    impl<T> TypeEq<T> for T {}
-
-    fn assert_type_eq<T, U>()
-    where
-        T: TypeEq<U>,
-    {
-    }
 
     #[test]
     fn value() {
