@@ -2,10 +2,13 @@
 
 use std::marker::PhantomData;
 
-use crate::peano::{N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, Nat};
+use crate::peano::{Nat, N0, N1, N10, N2, N3, N4, N5, N6, N7, N8, N9};
 
 /// A logical formula.
-pub trait Formula {}
+pub trait Formula {
+    /// Displays the formula as a string.
+    fn display() -> String;
+}
 
 /// A propositional variable.
 ///
@@ -17,7 +20,14 @@ where
     _n: PhantomData<N>,
 }
 
-impl<N> Formula for Variable<N> where N: Nat {}
+impl<N> Formula for Variable<N>
+where
+    N: Nat,
+{
+    fn display() -> String {
+        format!("p{}", N::VALUE)
+    }
+}
 
 /// The propositional variable `p0`.
 pub type P0 = Variable<N0>;
@@ -61,7 +71,14 @@ where
     _p: PhantomData<P>,
 }
 
-impl<P> Formula for Not<P> where P: Formula {}
+impl<P> Formula for Not<P>
+where
+    P: Formula,
+{
+    fn display() -> String {
+        format!("¬{}", P::display())
+    }
+}
 
 /// Logical implication:
 /// `P -> Q`
@@ -79,4 +96,18 @@ where
     P: Formula,
     Q: Formula,
 {
+    fn display() -> String {
+        format!("({} -> {})", P::display(), Q::display())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn display() {
+        type F = Not<Implies<P0, Not<P2>>>;
+        assert_eq!(F::display(), "¬(p0 -> ¬p2)");
+    }
 }
