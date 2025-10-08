@@ -2,3 +2,4 @@
 
 pub mod formula;
 pub mod peano;
+pub mod proof;
