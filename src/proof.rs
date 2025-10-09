@@ -85,11 +85,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::formula::{P0, P2};
+    use crate::formula::P0;
 
     use super::*;
 
     #[test]
+    #[allow(unused)]
     fn prove_p_implies_p() {
         type Desired<P> = Implies<P, P>;
 
@@ -99,7 +100,8 @@ mod tests {
         type Step4<P> = Axiom1<P, P0>;
         type Step5<P> = MP<Step4<P>, Step3<P>>;
 
-        assert_proves::<Step5<P0>, Desired<P0>>();
-        assert_proves::<Step5<P2>, Desired<P2>>();
+        fn for_all<P: Formula>() {
+            assert_proves::<Step5<P>, Desired<P>>();
+        }
     }
 }
