@@ -1,8 +1,0 @@
-[package]
-name = "propositional-macros-tests"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-propositional = { path = "../propositional" }
-propositional-macros = { path = "../propositional-macros" }
