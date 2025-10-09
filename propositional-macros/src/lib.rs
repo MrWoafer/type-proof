@@ -4,7 +4,14 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{LitInt, parse_macro_input};
 
-/// Creates a natural number at the type level.
+/// Creates a typed version of the given natural number.
+///
+/// ```
+/// use propositional::{peano::N3, type_utils::assert_type_eq};
+/// use propositional_macros::nat;
+///
+/// assert_type_eq::<nat!(3), N3>();
+/// ```
 #[proc_macro]
 pub fn nat(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
@@ -20,7 +27,14 @@ pub fn nat(input: TokenStream) -> TokenStream {
     TokenStream::from(output)
 }
 
-/// Creates a propositional variable with the given natural number as the index.
+/// Creates a typed propositional variable with the given natural number as the index.
+///
+/// ```
+/// use propositional::{formula::P3, type_utils::assert_type_eq};
+/// use propositional_macros::var;
+///
+/// assert_type_eq::<var!(3), P3>();
+/// ```
 #[proc_macro]
 pub fn var(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
