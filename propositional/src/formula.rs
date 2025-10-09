@@ -2,7 +2,10 @@
 
 use std::marker::PhantomData;
 
-use crate::peano::{Nat, N0, N1, N10, N2, N3, N4, N5, N6, N7, N8, N9};
+use crate::{
+    boolean::{self, Bool},
+    peano::{N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, Nat},
+};
 
 /// A logical formula.
 pub trait Formula {
@@ -101,13 +104,96 @@ where
     }
 }
 
+/// Deduces the value of an expression given the value of each of its propositional variables.
+///
+/// A valuation type should implement [`Valuation`] for each of its propositional variables, and
+/// [`Valuation`] will automatically be implemented for all formulas constructible from those variables.
+///
+/// ```
+/// use propositional::{
+///     boolean::{False, True},
+///     formula::{Implies, Not, P0, P2, Valuation},
+///     type_utils::assert_type_eq,
+/// };
+///
+/// type P = Implies<P0, Not<P2>>;
+/// struct V;
+/// impl Valuation<P0> for V {
+///     type Value = True;
+/// }
+/// impl Valuation<P2> for V {
+///     type Value = False;
+/// }
+///
+/// // V automatically implements Valuation<P> given Valuation<P0> and Valuation<P2>
+/// type PVal = <V as Valuation<P>>::Value;
+/// assert_type_eq::<PVal, True>();
+/// ```
+pub trait Valuation<P>
+where
+    P: Formula,
+{
+    type Value: Bool;
+}
+
+impl<V, P> Valuation<Not<P>> for V
+where
+    P: Formula,
+    V: Valuation<P>,
+{
+    type Value = boolean::Not<<V as Valuation<P>>::Value>;
+}
+
+impl<V, P, Q> Valuation<Implies<P, Q>> for V
+where
+    P: Formula,
+    Q: Formula,
+    V: Valuation<P> + Valuation<Q>,
+    <V as Valuation<P>>::Value: boolean::ImpliesImpl<<V as Valuation<Q>>::Value>,
+{
+    type Value = boolean::Implies<<V as Valuation<P>>::Value, <V as Valuation<Q>>::Value>;
+}
+
 #[cfg(test)]
 mod tests {
+    use crate::{
+        boolean::{False, True},
+        type_utils::assert_type_eq,
+    };
+
     use super::*;
 
     #[test]
     fn display() {
         type F = Not<Implies<P0, Not<P2>>>;
         assert_eq!(F::display(), "¬(p0 -> ¬p2)");
+    }
+
+    #[test]
+    fn valuation() {
+        // ¬(p0 -> ¬p2)
+        type P = Not<Implies<P0, Not<P2>>>;
+
+        struct V1;
+        impl Valuation<P0> for V1 {
+            type Value = True;
+        }
+        impl Valuation<P2> for V1 {
+            type Value = False;
+        }
+
+        type PVal1 = <V1 as Valuation<P>>::Value;
+        assert_type_eq::<PVal1, False>();
+
+        struct V2;
+        impl Valuation<P0> for V2 {
+            type Value = False;
+        }
+        impl Valuation<P2> for V2 {
+            type Value = True;
+        }
+
+        type PVal2 = <V2 as Valuation<P>>::Value;
+        assert_type_eq::<PVal2, False>();
     }
 }

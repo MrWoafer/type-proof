@@ -1,7 +1,7 @@
 //! Defines Boolean values and operations as types.
 
 /// A Boolean value, encoded as a type.
-pub trait Bool {
+pub trait Bool: NotImpl {
     const VALUE: bool;
 }
 
