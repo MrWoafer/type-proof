@@ -198,6 +198,7 @@ mod tests {
     #[test]
     fn pow() {
         assert_type_eq::<N1, Pow<N0, N0>>();
+        assert_type_eq::<N0, Pow<N0, N2>>();
         assert_type_eq::<N1, Pow<N3, N0>>();
         assert_type_eq::<N1, Pow<N1, N2>>();
         assert_type_eq::<N9, Pow<N3, N2>>();
