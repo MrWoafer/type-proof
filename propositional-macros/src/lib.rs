@@ -19,3 +19,14 @@ pub fn nat(input: TokenStream) -> TokenStream {
 
     TokenStream::from(output)
 }
+
+/// Creates a propositional variable with the given natural number as the index.
+#[proc_macro]
+pub fn var(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as LitInt);
+
+    let nat = quote! { ::propositional_macros::nat!(#input) };
+    let output = quote! { ::propositional::formula::Variable<#nat> };
+
+    TokenStream::from(output)
+}
