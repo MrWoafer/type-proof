@@ -38,28 +38,36 @@ where
     B: Bool,
 = <B as NotImpl>::Output;
 
-pub trait AndImpl<B>
+pub trait ImpliesImpl<B>
 where
     B: Bool,
 {
     type Output: Bool;
 }
 
-impl AndImpl<True> for True {
+impl ImpliesImpl<True> for True {
     type Output = True;
 }
 
-impl AndImpl<False> for True {
+impl ImpliesImpl<False> for True {
     type Output = False;
 }
 
-impl AndImpl<True> for False {
-    type Output = False;
+impl ImpliesImpl<True> for False {
+    type Output = True;
 }
 
-impl AndImpl<False> for False {
-    type Output = False;
+impl ImpliesImpl<False> for False {
+    type Output = True;
 }
+
+/// Boolean implication.
+#[allow(type_alias_bounds)]
+pub type Implies<A, B>
+where
+    A: Bool,
+    B: Bool,
+= <A as ImpliesImpl<B>>::Output;
 
 /// Boolean and.
 #[allow(type_alias_bounds)]
@@ -67,7 +75,7 @@ pub type And<A, B>
 where
     A: Bool,
     B: Bool,
-= <A as AndImpl<B>>::Output;
+= Not<Implies<A, Not<B>>>;
 
 /// Boolean or.
 #[allow(type_alias_bounds)]
@@ -119,5 +127,13 @@ mod tests {
         assert_type_eq::<True, Xor<False, True>>();
         assert_type_eq::<True, Xor<True, False>>();
         assert_type_eq::<False, Xor<False, False>>();
+    }
+
+    #[test]
+    fn implies() {
+        assert_type_eq::<True, Implies<True, True>>();
+        assert_type_eq::<True, Implies<False, True>>();
+        assert_type_eq::<False, Implies<True, False>>();
+        assert_type_eq::<True, Implies<False, False>>();
     }
 }
