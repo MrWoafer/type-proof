@@ -20,15 +20,15 @@ impl Bool for False {
 }
 
 pub trait NotImpl {
-    type Result: Bool;
+    type Output: Bool;
 }
 
 impl NotImpl for True {
-    type Result = False;
+    type Output = False;
 }
 
 impl NotImpl for False {
-    type Result = True;
+    type Output = True;
 }
 
 /// Boolean negation.
@@ -36,29 +36,29 @@ impl NotImpl for False {
 pub type Not<B>
 where
     B: Bool,
-= <B as NotImpl>::Result;
+= <B as NotImpl>::Output;
 
 pub trait AndImpl<B>
 where
     B: Bool,
 {
-    type Result: Bool;
+    type Output: Bool;
 }
 
 impl AndImpl<True> for True {
-    type Result = True;
+    type Output = True;
 }
 
 impl AndImpl<False> for True {
-    type Result = False;
+    type Output = False;
 }
 
 impl AndImpl<True> for False {
-    type Result = False;
+    type Output = False;
 }
 
 impl AndImpl<False> for False {
-    type Result = False;
+    type Output = False;
 }
 
 /// Boolean and.
@@ -67,7 +67,7 @@ pub type And<A, B>
 where
     A: Bool,
     B: Bool,
-= <A as AndImpl<B>>::Result;
+= <A as AndImpl<B>>::Output;
 
 /// Boolean or.
 #[allow(type_alias_bounds)]

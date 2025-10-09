@@ -67,14 +67,14 @@ pub trait AddTo<N>
 where
     N: Nat,
 {
-    type Result: Nat;
+    type Output: Nat;
 }
 
 impl<N> AddTo<N0> for N
 where
     N: Nat,
 {
-    type Result = N;
+    type Output = N;
 }
 
 impl<N, M> AddTo<Succ<M>> for N
@@ -83,7 +83,7 @@ where
     M: Nat,
     N: AddTo<M>,
 {
-    type Result = Succ<Add<N, M>>;
+    type Output = Succ<Add<N, M>>;
 }
 
 /// Addition:
@@ -93,20 +93,20 @@ pub type Add<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as AddTo<M>>::Result;
+= <N as AddTo<M>>::Output;
 
 pub trait MulWith<N>
 where
     N: Nat,
 {
-    type Result: Nat;
+    type Output: Nat;
 }
 
 impl<N> MulWith<N0> for N
 where
     N: Nat,
 {
-    type Result = N0;
+    type Output = N0;
 }
 
 impl<N, M> MulWith<Succ<M>> for N
@@ -116,7 +116,7 @@ where
     N: MulWith<M>,
     Mul<N, M>: AddTo<N>,
 {
-    type Result = Add<Mul<N, M>, N>;
+    type Output = Add<Mul<N, M>, N>;
 }
 
 /// Multiplication:
@@ -126,20 +126,20 @@ pub type Mul<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as MulWith<M>>::Result;
+= <N as MulWith<M>>::Output;
 
 pub trait ToPow<N>
 where
     N: Nat,
 {
-    type Result: Nat;
+    type Output: Nat;
 }
 
 impl<N> ToPow<N0> for N
 where
     N: Nat,
 {
-    type Result = N1;
+    type Output = N1;
 }
 
 impl<N, M> ToPow<Succ<M>> for N
@@ -149,7 +149,7 @@ where
     N: ToPow<M>,
     Pow<N, M>: MulWith<N>,
 {
-    type Result = Mul<Pow<N, M>, N>;
+    type Output = Mul<Pow<N, M>, N>;
 }
 
 /// Exponentiation:
@@ -161,7 +161,7 @@ pub type Pow<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as ToPow<M>>::Result;
+= <N as ToPow<M>>::Output;
 
 #[cfg(test)]
 mod tests {
