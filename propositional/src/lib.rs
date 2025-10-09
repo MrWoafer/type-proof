@@ -4,4 +4,4 @@ pub mod boolean;
 pub mod formula;
 pub mod peano;
 pub mod proof;
-mod type_utils;
+pub mod type_utils;
