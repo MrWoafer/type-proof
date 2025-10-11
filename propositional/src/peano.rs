@@ -214,8 +214,8 @@ mod tests {
 
     #[test]
     fn nat_macro() {
-        type N0Macro = nat!(0);
-        assert_eq!(N0Macro::VALUE, 0);
+        assert_type_eq::<nat!(0), N0>();
+        assert_type_eq::<nat!(4), N4>();
 
         type N15Macro = nat!(15);
         assert_eq!(N15Macro::VALUE, 15);
