@@ -3,6 +3,28 @@
 //! Each natural number has its own type - for example, `0` has the type [`N0`].
 //! There are operations defined on these typed natural numbers - for example, [`N5`] is the same
 //! type as [`Add<N2, N3>`].
+//!
+//! # Construction
+//!
+//! We start with the natural number `0` defined as a type [`N0`]. We then have a type [`Succ<N>`] and define
+//! `1` as [`Succ<N0>`], `2` as [`Succ<N2>`], etc.
+//!
+//! We provide type aliases [`N1`], [`N2`], ... for the first few natural numbers.
+//!
+//! Arbitrarily large natural numbers can be created using the [`nat!`] macro.
+//!
+//! Arithmetic operations are defined via type aliases, so there's a bijection between natural numbers and types.
+//!
+//! ## Example
+//!
+//! ```
+//! use propositional::{
+//!     peano::{Add, N2, N3, N5},
+//!     type_utils::assert_type_eq,
+//! };
+//!
+//! assert_type_eq::<Add<N2, N3>, N5>();
+//! ```
 
 use std::marker::PhantomData;
 
@@ -13,7 +35,7 @@ pub trait Nat {
     const VALUE: usize;
 }
 
-/// The successor of `N`. I.e. `N + 1`.
+/// The successor of `N`, i.e. `N + 1`.
 pub struct Succ<N>
 where
     N: Nat,

@@ -1,3 +1,5 @@
+//! Provides some helpers for working with Rust types.
+
 /// This trait just says a type is equal to itself, for making [`assert_type_eq`] work.
 ///
 /// This is automatically implemented on every type.
@@ -9,7 +11,7 @@ impl<T> TypeEq for T {
     type SelfType = Self;
 }
 
-/// Asserts that two types are the same, throwing a type-checking error if they are not.
+/// Statically asserts that two types are the same, throwing a type checker error if they are not.
 ///
 /// # Example
 ///
@@ -19,7 +21,7 @@ impl<T> TypeEq for T {
 /// type X = usize;
 /// assert_type_eq::<X, usize>();
 ///
-/// // Throws type-checking error
+/// // Throws type checker error
 /// // assert_type_eq::<f32, usize>();
 /// ```
 pub fn assert_type_eq<T, U>()

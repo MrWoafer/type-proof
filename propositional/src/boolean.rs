@@ -1,4 +1,18 @@
 //! Defines Boolean values and operations as types.
+//!
+//! There are types [`True`] and [`False`], and operations such as [`Not`], [`And`] and [`Or`]. These type operations
+//! work via type aliases, so the result of the operations is still one of [`True`] or [`False`].
+//!
+//! # Example
+//!
+//! ```
+//! use propositional::{
+//!     boolean::{And, False, True},
+//!     type_utils::assert_type_eq,
+//! };
+//!
+//! assert_type_eq::<And<False, True>, False>();
+//! ```
 
 /// A Boolean value, encoded as a type.
 pub trait Bool: NotImpl {

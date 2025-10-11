@@ -1,4 +1,96 @@
-//! Defines formulas as types.
+//! Defines propositional formulas as types.
+//!
+//! # Language
+//!
+//! Our logical language consists of the the following symbols:
+//! - Propositional variables `p0, p1, p2, ...`
+//! - Logical negation `¬`
+//! - Logical implication `->`
+//! - Parentheses `( )`
+//!
+//! Note that `{¬, ->}` is a [functionally complete](https://en.wikipedia.org/wiki/Functional_completeness)
+//! set of Boolean operators, so other common operators (e.g. `∧, ∨`) can be expressed in terms of them.
+//!
+//! # Formulas
+//!
+//! A propositional formula is defined precisely using the following rules:
+//!
+//! - All propositional variables (type [`Var<N>`])
+//! - `¬P`, where `P` is a formula (type [`Not<P>`])
+//! - `(P -> Q)` where `P, Q` are formulas (type [`Implies<P, Q>`])
+//!
+//! The parentheses around `P -> Q` are to ensure unique readability / make operator precedence explicit. This
+//! also means that there's a simple bijection between the Rust types defined above and well-formed formulas in
+//! our language.
+//!
+//! There are some predefined type aliases for [`Var<N>`] for the first few natural numbers - for example, [`P0`]
+//! is an alias for [`Var<N0>`]. Propositional variables with arbitrarily large indices can be created using the
+//! [`var!`] macro.
+//!
+//! Some operators expressable in terms of `¬, ->` are defined via type aliases - for example, `∧` has the alias
+//! [`And<P, Q>`].
+//!
+//! ## Example
+//!
+//! The formula `(p0 -> ¬p2)` can be defined as a type like so:
+//!
+//! ```
+//! use propositional::formula::{Implies, Not, P0, P2};
+//!
+//! type P = Implies<P0, Not<P2>>;
+//! ```
+//!
+//! # Valuations
+//!
+//! Given an assignment of [`True`] or [`False`] to each propositional variable in a formula, the formula can then
+//! be assigned a value of [`True`] or [`False`], using the following rules:
+//!
+//! ```text
+//! |   P   |  ¬P   |
+//! | ----- | ----- |
+//! | False | True  |
+//! | True  | False |
+//!
+//! |   P   |   Q   | (P -> Q) |
+//! | ----- | ----- | -------- |
+//! | False | False |   True   |
+//! | False | True  |   True   |
+//! | True  | False |   False  |
+//! | True  | True  |   True   |
+//! ```
+//!
+//! Valuations can be done via the [`Valuation`] trait.
+//!
+//! ## Example
+//!
+//! To find the value of `(p0 -> ¬p2)` under the assignment `p0 = True, p2 = False`:
+//!
+//! ```
+//! use propositional::{
+//!     boolean::{False, True},
+//!     formula::{Implies, Not, P0, P2, Valuation},
+//!     type_utils::assert_type_eq,
+//! };
+//!
+//! // The formula (p0 -> ¬p2)
+//! type P = Implies<P0, Not<P2>>;
+//!
+//! // Our valuation
+//! struct V;
+//! impl Valuation<P0> for V {
+//!     type Value = True;
+//! }
+//! impl Valuation<P2> for V {
+//!     type Value = False;
+//! }
+//!
+//! // V automatically implements Valuation<P> given Valuation<P0> and Valuation<P2>
+//! type ValueOfP = <V as Valuation<P>>::Value;
+//! assert_type_eq::<ValueOfP, True>();
+//! ``````
+//!
+//! [`True`]: crate::boolean::True
+//! [`False`]: crate::boolean::False
 
 use std::marker::PhantomData;
 
@@ -9,7 +101,7 @@ use crate::{
 
 pub use propositional_macros::var;
 
-/// A logical formula.
+/// A propositional formula.
 pub trait Formula {
     /// Displays the formula as a string.
     fn display() -> String;
@@ -140,26 +232,7 @@ where
 ///
 /// # Example
 ///
-/// ```
-/// use propositional::{
-///     boolean::{False, True},
-///     formula::{Implies, Not, P0, P2, Valuation},
-///     type_utils::assert_type_eq,
-/// };
-///
-/// type P = Implies<P0, Not<P2>>;
-/// struct V;
-/// impl Valuation<P0> for V {
-///     type Value = True;
-/// }
-/// impl Valuation<P2> for V {
-///     type Value = False;
-/// }
-///
-/// // V automatically implements Valuation<P> given Valuation<P0> and Valuation<P2>
-/// type PVal = <V as Valuation<P>>::Value;
-/// assert_type_eq::<PVal, True>();
-/// ```
+/// See the [module documentation](self).
 pub trait Valuation<P>
 where
     P: Formula,
