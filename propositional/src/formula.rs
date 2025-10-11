@@ -106,6 +106,33 @@ where
     }
 }
 
+/// Logical conjunction (and):
+/// `P ∧ Q`
+#[allow(type_alias_bounds)]
+pub type And<P, Q>
+where
+    P: Formula,
+    Q: Formula,
+= Not<Implies<P, Not<Q>>>;
+
+/// Logical disjunction (or):
+/// `P ∨ Q`
+#[allow(type_alias_bounds)]
+pub type Or<P, Q>
+where
+    P: Formula,
+    Q: Formula,
+= Not<And<Not<P>, Not<Q>>>; // using De Morgan's laws
+
+/// Logical equivalence:
+/// `P <-> Q`
+#[allow(type_alias_bounds)]
+pub type Iff<P, Q>
+where
+    P: Formula,
+    Q: Formula,
+= And<Implies<P, Q>, Implies<Q, P>>;
+
 /// Deduces the value of an expression given the value of each of its propositional variables.
 ///
 /// A valuation type should implement [`Valuation`] for each of its propositional variables, and

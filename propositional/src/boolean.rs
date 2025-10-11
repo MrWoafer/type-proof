@@ -97,6 +97,14 @@ where
     B: Bool,
 = And<Or<A, B>, Not<And<A, B>>>;
 
+/// Boolean equivalence.
+#[allow(type_alias_bounds)]
+pub type Iff<A, B>
+where
+    A: Bool,
+    B: Bool,
+= And<Implies<A, B>, Implies<B, A>>;
+
 #[cfg(test)]
 mod tests {
     use crate::type_utils::assert_type_eq;
