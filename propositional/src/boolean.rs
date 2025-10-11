@@ -104,6 +104,12 @@ mod tests {
     use super::*;
 
     #[test]
+    fn value() {
+        assert_eq!(True::VALUE, true);
+        assert_eq!(False::VALUE, false);
+    }
+
+    #[test]
     fn not() {
         assert_type_eq::<False, Not<True>>();
         assert_type_eq::<True, Not<False>>();
