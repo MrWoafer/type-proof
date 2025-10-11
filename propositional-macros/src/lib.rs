@@ -38,7 +38,7 @@ pub fn var(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
 
     let nat = quote! { ::propositional_macros::nat!(#input) };
-    let output = quote! { ::propositional::formula::Variable<#nat> };
+    let output = quote! { ::propositional::formula::Var<#nat> };
 
     TokenStream::from(output)
 }

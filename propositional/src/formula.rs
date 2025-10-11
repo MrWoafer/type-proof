@@ -18,14 +18,14 @@ pub trait Formula {
 /// A propositional variable.
 ///
 /// `N` is the index of the propositional variable.
-pub struct Variable<N>
+pub struct Var<N>
 where
     N: Nat,
 {
     _n: PhantomData<N>,
 }
 
-impl<N> Formula for Variable<N>
+impl<N> Formula for Var<N>
 where
     N: Nat,
 {
@@ -35,37 +35,37 @@ where
 }
 
 /// The propositional variable `p0`.
-pub type P0 = Variable<N0>;
+pub type P0 = Var<N0>;
 
 /// The propositional variable `p1`.
-pub type P1 = Variable<N1>;
+pub type P1 = Var<N1>;
 
 /// The propositional variable `p2`.
-pub type P2 = Variable<N2>;
+pub type P2 = Var<N2>;
 
 /// The propositional variable `p3`.
-pub type P3 = Variable<N3>;
+pub type P3 = Var<N3>;
 
 /// The propositional variable `p4`.
-pub type P4 = Variable<N4>;
+pub type P4 = Var<N4>;
 
 /// The propositional variable `p5`.
-pub type P5 = Variable<N5>;
+pub type P5 = Var<N5>;
 
 /// The propositional variable `p6`.
-pub type P6 = Variable<N6>;
+pub type P6 = Var<N6>;
 
 /// The propositional variable `p7`.
-pub type P7 = Variable<N7>;
+pub type P7 = Var<N7>;
 
 /// The propositional variable `p8`.
-pub type P8 = Variable<N8>;
+pub type P8 = Var<N8>;
 
 /// The propositional variable `p9`.
-pub type P9 = Variable<N9>;
+pub type P9 = Var<N9>;
 
 /// The propositional variable `p10`.
-pub type P10 = Variable<N10>;
+pub type P10 = Var<N10>;
 
 /// Logical negation:
 /// `¬P`
