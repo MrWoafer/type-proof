@@ -19,6 +19,8 @@ impl Bool for False {
     const VALUE: bool = false;
 }
 
+/// Does `¬Self`.
+#[doc(hidden)]
 pub trait NotImpl {
     type Output: Bool;
 }
@@ -38,6 +40,8 @@ where
     B: Bool,
 = <B as NotImpl>::Output;
 
+/// Does `Self -> B`.
+#[doc(hidden)]
 pub trait ImpliesImpl<B>
 where
     B: Bool,

@@ -65,25 +65,27 @@ pub type N9 = Succ<N8>;
 /// The natural number 10.
 pub type N10 = Succ<N9>;
 
-pub trait AddTo<N>
+/// Does `Self + N`.
+#[doc(hidden)]
+pub trait AddImpl<N>
 where
     N: Nat,
 {
     type Output: Nat;
 }
 
-impl<N> AddTo<N0> for N
+impl<N> AddImpl<N0> for N
 where
     N: Nat,
 {
     type Output = N;
 }
 
-impl<N, M> AddTo<Succ<M>> for N
+impl<N, M> AddImpl<Succ<M>> for N
 where
     N: Nat,
     M: Nat,
-    N: AddTo<M>,
+    N: AddImpl<M>,
 {
     type Output = Succ<Add<N, M>>;
 }
@@ -95,28 +97,30 @@ pub type Add<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as AddTo<M>>::Output;
+= <N as AddImpl<M>>::Output;
 
-pub trait MulWith<N>
+/// Does `Self * N`.
+#[doc(hidden)]
+pub trait MulImpl<N>
 where
     N: Nat,
 {
     type Output: Nat;
 }
 
-impl<N> MulWith<N0> for N
+impl<N> MulImpl<N0> for N
 where
     N: Nat,
 {
     type Output = N0;
 }
 
-impl<N, M> MulWith<Succ<M>> for N
+impl<N, M> MulImpl<Succ<M>> for N
 where
     N: Nat,
     M: Nat,
-    N: MulWith<M>,
-    Mul<N, M>: AddTo<N>,
+    N: MulImpl<M>,
+    Mul<N, M>: AddImpl<N>,
 {
     type Output = Add<Mul<N, M>, N>;
 }
@@ -128,28 +132,30 @@ pub type Mul<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as MulWith<M>>::Output;
+= <N as MulImpl<M>>::Output;
 
-pub trait ToPow<N>
+/// Does `Self ^ N`.
+#[doc(hidden)]
+pub trait PowImpl<N>
 where
     N: Nat,
 {
     type Output: Nat;
 }
 
-impl<N> ToPow<N0> for N
+impl<N> PowImpl<N0> for N
 where
     N: Nat,
 {
     type Output = N1;
 }
 
-impl<N, M> ToPow<Succ<M>> for N
+impl<N, M> PowImpl<Succ<M>> for N
 where
     N: Nat,
     M: Nat,
-    N: ToPow<M>,
-    Pow<N, M>: MulWith<N>,
+    N: PowImpl<M>,
+    Pow<N, M>: MulImpl<N>,
 {
     type Output = Mul<Pow<N, M>, N>;
 }
@@ -163,7 +169,7 @@ pub type Pow<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as ToPow<M>>::Output;
+= <N as PowImpl<M>>::Output;
 
 #[cfg(test)]
 mod tests {
