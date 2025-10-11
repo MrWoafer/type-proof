@@ -86,6 +86,17 @@ use crate::formula::{Formula, Implies, Not};
 pub trait Proof {
     /// The formula that this proof proves.
     type Proves: Formula;
+
+    /// How many statements this proof involves.
+    const LENGTH: usize;
+
+    /// Displays the proof as a string.
+    fn display() -> String {
+        Self::display_offset(1)
+    }
+
+    /// Displays the proof as a string, with line numbers starting from `start_line_num`.
+    fn display_offset(start_line_num: usize) -> String;
 }
 
 /// Statically asserts that `Pr` is a proof of `P`, throwing a type checker error if it is not.
@@ -124,12 +135,25 @@ where
     Q: Formula,
 = Implies<Implies<Not<Q>, Not<P>>, Implies<P, Q>>;
 
+fn proof_display_formula<P>(line_num: usize) -> String
+where
+    P: Formula,
+{
+    format!("{:<3} {}", format!("{}.", line_num), P::display())
+}
+
 impl<P, Q> Proof for Axiom1<P, Q>
 where
     P: Formula,
     Q: Formula,
 {
     type Proves = Self;
+
+    const LENGTH: usize = 1;
+
+    fn display_offset(start_line_num: usize) -> String {
+        proof_display_formula::<Self>(start_line_num)
+    }
 }
 
 impl<P, Q, R> Proof for Axiom2<P, Q, R>
@@ -139,6 +163,12 @@ where
     R: Formula,
 {
     type Proves = Self;
+
+    const LENGTH: usize = 1;
+
+    fn display_offset(start_line_num: usize) -> String {
+        proof_display_formula::<Self>(start_line_num)
+    }
 }
 
 impl<P, Q> Proof for Axiom3<P, Q>
@@ -147,6 +177,12 @@ where
     Q: Formula,
 {
     type Proves = Self;
+
+    const LENGTH: usize = 1;
+
+    fn display_offset(start_line_num: usize) -> String {
+        proof_display_formula::<Self>(start_line_num)
+    }
 }
 
 /// The modus ponens inference rule:
@@ -166,11 +202,22 @@ where
     PrI: Proof<Proves = Implies<P, Q>>,
 {
     type Proves = Q;
+
+    const LENGTH: usize = PrP::LENGTH + PrI::LENGTH + 1;
+
+    fn display_offset(start_line_num: usize) -> String {
+        format!(
+            "{}\n{}\n{}",
+            PrP::display_offset(start_line_num),
+            PrI::display_offset(start_line_num + PrP::LENGTH),
+            proof_display_formula::<Q>(start_line_num + PrP::LENGTH + PrI::LENGTH)
+        )
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::formula::P0;
+    use crate::formula::{P0, P2};
 
     use super::*;
 
@@ -188,5 +235,24 @@ mod tests {
         fn for_all<P: Formula>() {
             assert_proves::<Step5<P>, ToProve<P>>();
         }
+    }
+
+    #[test]
+    fn display() {
+        // Proving p2 -> p2
+
+        type Step1 = Axiom1<P2, Implies<P0, P2>>;
+        type Step2 = Axiom2<P2, Implies<P0, P2>, P2>;
+        type Step3 = MP<Step1, Step2>;
+        type Step4 = Axiom1<P2, P0>;
+        type Step5 = MP<Step4, Step3>;
+
+        let expected_display = "1.  (p2 -> (p0 -> p2))
+2.  (p2 -> ((p0 -> p2) -> p2))
+3.  ((p2 -> ((p0 -> p2) -> p2)) -> ((p2 -> (p0 -> p2)) -> (p2 -> p2)))
+4.  ((p2 -> (p0 -> p2)) -> (p2 -> p2))
+5.  (p2 -> p2)";
+
+        assert_eq!(Step5::display(), expected_display);
     }
 }
