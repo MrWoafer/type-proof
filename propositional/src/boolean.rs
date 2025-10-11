@@ -19,6 +19,13 @@ impl Bool for False {
     const VALUE: bool = false;
 }
 
+/// Boolean negation.
+#[allow(type_alias_bounds)]
+pub type Not<B>
+where
+    B: Bool,
+= <B as NotImpl>::Output;
+
 /// Does `¬Self`.
 #[doc(hidden)]
 pub trait NotImpl {
@@ -33,12 +40,13 @@ impl NotImpl for False {
     type Output = True;
 }
 
-/// Boolean negation.
+/// Boolean implication.
 #[allow(type_alias_bounds)]
-pub type Not<B>
+pub type Implies<A, B>
 where
+    A: Bool,
     B: Bool,
-= <B as NotImpl>::Output;
+= <A as ImpliesImpl<B>>::Output;
 
 /// Does `Self -> B`.
 #[doc(hidden)]
@@ -64,14 +72,6 @@ impl ImpliesImpl<True> for False {
 impl ImpliesImpl<False> for False {
     type Output = True;
 }
-
-/// Boolean implication.
-#[allow(type_alias_bounds)]
-pub type Implies<A, B>
-where
-    A: Bool,
-    B: Bool,
-= <A as ImpliesImpl<B>>::Output;
 
 /// Boolean and.
 #[allow(type_alias_bounds)]

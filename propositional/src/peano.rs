@@ -65,6 +65,15 @@ pub type N9 = Succ<N8>;
 /// The natural number 10.
 pub type N10 = Succ<N9>;
 
+/// Addition:
+/// `N + M`
+#[allow(type_alias_bounds)]
+pub type Add<N, M>
+where
+    N: Nat,
+    M: Nat,
+= <N as AddImpl<M>>::Output;
+
 /// Does `Self + N`.
 #[doc(hidden)]
 pub trait AddImpl<N>
@@ -90,14 +99,14 @@ where
     type Output = Succ<Add<N, M>>;
 }
 
-/// Addition:
-/// `N + M`
+/// Multiplication:
+/// `N * M`
 #[allow(type_alias_bounds)]
-pub type Add<N, M>
+pub type Mul<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as AddImpl<M>>::Output;
+= <N as MulImpl<M>>::Output;
 
 /// Does `Self * N`.
 #[doc(hidden)]
@@ -125,14 +134,16 @@ where
     type Output = Add<Mul<N, M>, N>;
 }
 
-/// Multiplication:
-/// `N * M`
+/// Exponentiation:
+/// `N ^ M`
+///
+/// Note `0 ^ 0` is taken to be `1`.
 #[allow(type_alias_bounds)]
-pub type Mul<N, M>
+pub type Pow<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as MulImpl<M>>::Output;
+= <N as PowImpl<M>>::Output;
 
 /// Does `Self ^ N`.
 #[doc(hidden)]
@@ -159,17 +170,6 @@ where
 {
     type Output = Mul<Pow<N, M>, N>;
 }
-
-/// Exponentiation:
-/// `N ^ M`
-///
-/// Note `0 ^ 0` is taken to be `1`.
-#[allow(type_alias_bounds)]
-pub type Pow<N, M>
-where
-    N: Nat,
-    M: Nat,
-= <N as PowImpl<M>>::Output;
 
 #[cfg(test)]
 mod tests {
