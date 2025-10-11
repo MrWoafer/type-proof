@@ -3,6 +3,8 @@ impl<T> TypeEq<T> for T {}
 
 /// Asserts that two types are the same, throwing a type-checking error if they are not.
 ///
+/// # Example
+///
 /// ```
 /// use propositional::type_utils::assert_type_eq;
 ///

@@ -138,6 +138,8 @@ where
 /// A valuation type should implement [`Valuation`] for each of its propositional variables, and
 /// [`Valuation`] will automatically be implemented for all formulas constructible from those variables.
 ///
+/// # Example
+///
 /// ```
 /// use propositional::{
 ///     boolean::{False, True},

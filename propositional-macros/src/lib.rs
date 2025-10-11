@@ -6,6 +6,8 @@ use syn::{LitInt, parse_macro_input};
 
 /// Creates a typed version of the given natural number.
 ///
+/// # Example
+///
 /// ```
 /// use propositional::{peano::{N3, nat}, type_utils::assert_type_eq};
 ///
@@ -27,6 +29,8 @@ pub fn nat(input: TokenStream) -> TokenStream {
 }
 
 /// Creates a typed propositional variable with the given natural number as the index.
+///
+/// # Example
 ///
 /// ```
 /// use propositional::{formula::{P3, var}, type_utils::assert_type_eq};
