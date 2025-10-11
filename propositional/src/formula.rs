@@ -7,6 +7,8 @@ use crate::{
     peano::{N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, Nat},
 };
 
+pub use propositional_macros::var;
+
 /// A logical formula.
 pub trait Formula {
     /// Displays the formula as a string.
@@ -195,5 +197,11 @@ mod tests {
 
         type PVal2 = <V2 as Valuation<P>>::Value;
         assert_type_eq::<PVal2, False>();
+    }
+
+    #[test]
+    fn var_macro() {
+        assert_type_eq::<var!(0), P0>();
+        assert_type_eq::<var!(3), P3>();
     }
 }

@@ -6,6 +6,8 @@
 
 use std::marker::PhantomData;
 
+pub use propositional_macros::nat;
+
 /// A natural number: 0, 1, 2, ...
 pub trait Nat {
     const VALUE: usize;
@@ -202,5 +204,14 @@ mod tests {
         assert_type_eq::<N1, Pow<N3, N0>>();
         assert_type_eq::<N1, Pow<N1, N2>>();
         assert_type_eq::<N9, Pow<N3, N2>>();
+    }
+
+    #[test]
+    fn nat_macro() {
+        type N0Macro = nat!(0);
+        assert_eq!(N0Macro::VALUE, 0);
+
+        type N15Macro = nat!(15);
+        assert_eq!(N15Macro::VALUE, 15);
     }
 }

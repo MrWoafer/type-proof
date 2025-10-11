@@ -7,8 +7,7 @@ use syn::{LitInt, parse_macro_input};
 /// Creates a typed version of the given natural number.
 ///
 /// ```
-/// use propositional::{peano::N3, type_utils::assert_type_eq};
-/// use propositional_macros::nat;
+/// use propositional::{peano::{N3, nat}, type_utils::assert_type_eq};
 ///
 /// assert_type_eq::<nat!(3), N3>();
 /// ```
@@ -30,8 +29,7 @@ pub fn nat(input: TokenStream) -> TokenStream {
 /// Creates a typed propositional variable with the given natural number as the index.
 ///
 /// ```
-/// use propositional::{formula::P3, type_utils::assert_type_eq};
-/// use propositional_macros::var;
+/// use propositional::{formula::{P3, var}, type_utils::assert_type_eq};
 ///
 /// assert_type_eq::<var!(3), P3>();
 /// ```

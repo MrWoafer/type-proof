@@ -14,6 +14,9 @@ dependencies = [
 [[package]]
 name = "propositional"
 version = "0.1.0"
+dependencies = [
+ "propositional-macros",
+]
 
 [[package]]
 name = "propositional-macros"

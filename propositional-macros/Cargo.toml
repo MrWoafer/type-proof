@@ -9,4 +9,6 @@ proc-macro = true
 [dependencies]
 syn = "2"
 quote = "1"
+
+[dev-dependencies]
 propositional = { path = "../propositional" }
