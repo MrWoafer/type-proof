@@ -32,6 +32,7 @@ pub use type_proof_macros::nat;
 
 /// A natural number: 0, 1, 2, ...
 pub trait Nat {
+    /// The natural number as a [`usize`].
     const VALUE: usize;
 }
 

@@ -16,6 +16,7 @@
 
 /// A Boolean value, encoded as a type.
 pub trait Bool: NotImpl {
+    /// The Boolean value as a [`bool`].
     const VALUE: bool;
 }
 

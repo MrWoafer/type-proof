@@ -4,6 +4,7 @@
 ///
 /// This is automatically implemented on every type.
 pub trait TypeEq {
+    /// This is always the type that the trait is implemented on.
     type SelfType;
 }
 

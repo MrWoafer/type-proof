@@ -237,6 +237,7 @@ pub trait Valuation<P>
 where
     P: Formula,
 {
+    /// The value of the valuation on `P`.
     type Value: Bool;
 }
 
