@@ -18,7 +18,7 @@
 //! ## Example
 //!
 //! ```
-//! use propositional::{
+//! use type_proof::{
 //!     peano::{Add, N2, N3, N5},
 //!     type_utils::assert_type_eq,
 //! };
@@ -28,7 +28,7 @@
 
 use std::marker::PhantomData;
 
-pub use propositional_macros::nat;
+pub use type_proof_macros::nat;
 
 /// A natural number: 0, 1, 2, ...
 pub trait Nat {

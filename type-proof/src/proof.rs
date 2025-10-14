@@ -57,7 +57,7 @@
 //! This can be represented in our types as follows:
 //!
 //! ```
-//! use propositional::{
+//! use type_proof::{
 //!     formula::{Formula, Implies, P0},
 //!     proof::{Axiom1, Axiom2, MP, assert_proves},
 //! };

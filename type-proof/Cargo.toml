@@ -1,7 +1,7 @@
 [package]
-name = "propositional"
+name = "type-proof"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-propositional-macros = { path = "../propositional-macros" }
+type-proof-macros = { path = "../type-proof-macros" }

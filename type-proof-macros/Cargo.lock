@@ -12,22 +12,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "propositional"
-version = "0.1.0"
-dependencies = [
- "propositional-macros",
-]
-
-[[package]]
-name = "propositional-macros"
-version = "0.1.0"
-dependencies = [
- "propositional",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "quote"
 version = "1.0.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -45,6 +29,22 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "type-proof"
+version = "0.1.0"
+dependencies = [
+ "type-proof-macros",
+]
+
+[[package]]
+name = "type-proof-macros"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+ "type-proof",
 ]
 
 [[package]]

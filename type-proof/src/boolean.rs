@@ -6,7 +6,7 @@
 //! # Example
 //!
 //! ```
-//! use propositional::{
+//! use type_proof::{
 //!     boolean::{And, False, True},
 //!     type_utils::assert_type_eq,
 //! };

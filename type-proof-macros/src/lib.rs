@@ -1,4 +1,4 @@
-//! Macros for the [`propositional`] crate.
+//! Macros for the [`type_proof`] crate.
 
 use proc_macro::TokenStream;
 use quote::quote;
@@ -11,7 +11,7 @@ use syn::{LitInt, parse_macro_input};
 /// # Example
 ///
 /// ```
-/// use propositional::{
+/// use type_proof::{
 ///     peano::{N3, nat},
 ///     type_utils::assert_type_eq,
 /// };
@@ -25,9 +25,9 @@ pub fn nat(input: TokenStream) -> TokenStream {
         .base10_parse::<usize>()
         .expect("natural numbers are non-negative");
 
-    let mut output = quote! { ::propositional::peano::N0 };
+    let mut output = quote! { ::type_proof::peano::N0 };
     for _ in 0..value {
-        output = quote! { ::propositional::peano::Succ<#output> };
+        output = quote! { ::type_proof::peano::Succ<#output> };
     }
 
     TokenStream::from(output)
@@ -40,7 +40,7 @@ pub fn nat(input: TokenStream) -> TokenStream {
 /// # Example
 ///
 /// ```
-/// use propositional::{
+/// use type_proof::{
 ///     formula::{P3, var},
 ///     type_utils::assert_type_eq,
 /// };
@@ -51,8 +51,8 @@ pub fn nat(input: TokenStream) -> TokenStream {
 pub fn var(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
 
-    let nat = quote! { ::propositional_macros::nat!(#input) };
-    let output = quote! { ::propositional::formula::Var<#nat> };
+    let nat = quote! { ::type_proof_macros::nat!(#input) };
+    let output = quote! { ::type_proof::formula::Var<#nat> };
 
     TokenStream::from(output)
 }

@@ -16,7 +16,7 @@ impl<T> TypeEq for T {
 /// # Example
 ///
 /// ```
-/// use propositional::type_utils::assert_type_eq;
+/// use type_proof::type_utils::assert_type_eq;
 ///
 /// type X = usize;
 /// assert_type_eq::<X, usize>();

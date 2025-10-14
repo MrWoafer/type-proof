@@ -35,7 +35,7 @@
 //! The formula `(p0 -> ¬p2)` can be defined as a type like so:
 //!
 //! ```
-//! use propositional::formula::{Implies, Not, P0, P2};
+//! use type_proof::formula::{Implies, Not, P0, P2};
 //!
 //! type P = Implies<P0, Not<P2>>;
 //! ```
@@ -66,7 +66,7 @@
 //! To find the value of `(p0 -> ¬p2)` under the assignment `p0 = True, p2 = False`:
 //!
 //! ```
-//! use propositional::{
+//! use type_proof::{
 //!     boolean::{False, True},
 //!     formula::{Implies, Not, P0, P2, Valuation},
 //!     type_utils::assert_type_eq,
@@ -99,7 +99,7 @@ use crate::{
     peano::{N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, Nat},
 };
 
-pub use propositional_macros::var;
+pub use type_proof_macros::var;
 
 /// A propositional formula.
 pub trait Formula {
