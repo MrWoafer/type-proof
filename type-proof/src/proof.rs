@@ -76,6 +76,52 @@
 //! }
 //! ```
 //!
+//! An invalid proof will throw a type checker error:
+//!
+//! ```compile_fail
+//! use type_proof::{
+//!     formula::{Formula, Implies},
+//!     proof::{Axiom1, MP, assert_proves},
+//! };
+//!
+//! type ToProve<P> = Implies<P, P>;
+//!
+//! // ⊢ P -> (P -> P)
+//! type Step1<P> = Axiom1<P, P>;
+//! // Deduce ⊢ P -> P from ⊢ P and ⊢ P -> (P -> P)
+//! // This may not be valid as we don't necessarily have ⊢ P
+//! type Step2<P> = MP<P, Step1<P>>;
+//!
+//! fn for_all<P: Formula>() {
+//!     // Fails to compile
+//!     assert_proves::<Step2<P>, ToProve<P>>();
+//! }
+//! ```
+//!
+//! It's not true that this proof is valid for all `P`, because it requires `⊢ P`, and there are `P`s for which
+//! that doesn't hold. But, this is valid if `P` is an axiom:
+//!
+//! ```
+//! # use type_proof::{
+//! #     formula::{Formula, Implies},
+//! #     proof::{Axiom1, MP, assert_proves},
+//! # };
+//! #
+//! # type ToProve<P> = Implies<P, P>;
+//! #
+//! # type Step1<P> = Axiom1<P, P>;
+//! # type Step2<P> = MP<P, Step1<P>>;
+//! #
+//! use type_proof::{
+//!     formula::{And, P0, P1},
+//!     proof::Axiom3,
+//! };
+//!
+//! type Q = Axiom3<P0, And<P1, P0>>;
+//!
+//! assert_proves::<Step2<Q>, ToProve<Q>>();
+//! ```
+//!
 //! [`P2`]: crate::formula::P2
 
 use std::marker::PhantomData;

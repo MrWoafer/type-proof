@@ -21,9 +21,12 @@ impl<T> TypeEq for T {
 ///
 /// type X = usize;
 /// assert_type_eq::<X, usize>();
+/// ```
 ///
-/// // Throws type checker error
-/// // assert_type_eq::<f32, usize>();
+/// ```compile_fail
+/// # use type_proof::type_utils::assert_type_eq;
+/// #
+/// assert_type_eq::<f32, usize>();
 /// ```
 pub fn assert_type_eq<T, U>()
 where
