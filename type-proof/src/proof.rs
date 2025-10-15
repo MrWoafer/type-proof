@@ -17,7 +17,8 @@
 //!
 //! (Technical point: we have omitted the parentheses round the outer `->` clauses to improve readability.)
 //!
-//! These respectively have the type aliases [`Axiom1<P, Q>`], [`Axiom2<P, Q, R>`], [`Axiom3<P, Q>`].
+//! These respectively have the type aliases [`Axiom1<P, Q>`], [`Axiom2<P, Q, R>`] and [`Axiom3<P, Q>`], and are
+//! encompassed by the [`Axiom`] trait.
 //!
 //! ## Inference rules
 //!
@@ -112,14 +113,11 @@
 //! # type Step1<P> = Axiom1<P, P>;
 //! # type Step2<P> = MP<P, Step1<P>>;
 //! #
-//! use type_proof::{
-//!     formula::{And, P0, P1},
-//!     proof::Axiom3,
-//! };
+//! use type_proof::proof::Axiom;
 //!
-//! type Q = Axiom3<P0, And<P1, P0>>;
-//!
-//! assert_proves::<Step2<Q>, ToProve<Q>>();
+//! fn for_all<P: Axiom>() {
+//!     assert_proves::<Step2<P>, ToProve<P>>();
+//! }
 //! ```
 //!
 //! [`P2`]: crate::formula::P2
@@ -156,6 +154,29 @@ where
 {
 }
 
+fn proof_display_formula<P>(line_num: usize) -> String
+where
+    P: Formula,
+{
+    format!("{:<3} {}", format!("{}.", line_num), P::display())
+}
+
+/// A formula that can be used in a proof without requiring it to have been deduced from previous steps.
+pub trait Axiom: Formula + Proof<Proves = Self> {}
+
+impl<A> Proof for A
+where
+    A: Axiom,
+{
+    type Proves = Self;
+
+    const LENGTH: usize = 1;
+
+    fn display_offset(start_line_num: usize) -> String {
+        proof_display_formula::<Self>(start_line_num)
+    }
+}
+
 /// The axiom schema `⊢ P -> (Q -> P)`, where `P, Q` are any formulas.
 #[allow(type_alias_bounds)]
 pub type Axiom1<P, Q>
@@ -181,54 +202,26 @@ where
     Q: Formula,
 = Implies<Implies<Not<Q>, Not<P>>, Implies<P, Q>>;
 
-fn proof_display_formula<P>(line_num: usize) -> String
-where
-    P: Formula,
-{
-    format!("{:<3} {}", format!("{}.", line_num), P::display())
-}
-
-impl<P, Q> Proof for Axiom1<P, Q>
+impl<P, Q> Axiom for Axiom1<P, Q>
 where
     P: Formula,
     Q: Formula,
 {
-    type Proves = Self;
-
-    const LENGTH: usize = 1;
-
-    fn display_offset(start_line_num: usize) -> String {
-        proof_display_formula::<Self>(start_line_num)
-    }
 }
 
-impl<P, Q, R> Proof for Axiom2<P, Q, R>
+impl<P, Q, R> Axiom for Axiom2<P, Q, R>
 where
     P: Formula,
     Q: Formula,
     R: Formula,
 {
-    type Proves = Self;
-
-    const LENGTH: usize = 1;
-
-    fn display_offset(start_line_num: usize) -> String {
-        proof_display_formula::<Self>(start_line_num)
-    }
 }
 
-impl<P, Q> Proof for Axiom3<P, Q>
+impl<P, Q> Axiom for Axiom3<P, Q>
 where
     P: Formula,
     Q: Formula,
 {
-    type Proves = Self;
-
-    const LENGTH: usize = 1;
-
-    fn display_offset(start_line_num: usize) -> String {
-        proof_display_formula::<Self>(start_line_num)
-    }
 }
 
 /// The modus ponens inference rule:
