@@ -101,7 +101,7 @@ use crate::{
 
 pub use type_proof_macros::var;
 
-/// A propositional formula.
+/// A propositional formula, encoded as a type.
 pub trait Formula {
     /// Displays the formula as a string.
     fn display() -> String;

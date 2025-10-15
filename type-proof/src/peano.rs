@@ -30,7 +30,7 @@ use std::marker::PhantomData;
 
 pub use type_proof_macros::nat;
 
-/// A natural number: 0, 1, 2, ...
+/// A natural number (0, 1, 2, ...), encoded as a type.
 pub trait Nat {
     /// The natural number as a [`usize`].
     const VALUE: usize;
