@@ -11,7 +11,7 @@
 //!
 //! We provide type aliases [`N1`], [`N2`], ... for the first few natural numbers.
 //!
-//! Arbitrarily large natural numbers can be created using the [`nat!`] macro.
+//! Arbitrarily large natural numbers can be created using the [`N!`] macro.
 //!
 //! Arithmetic operations are defined via type aliases, so there's a bijection between natural numbers and types.
 //!
@@ -28,7 +28,7 @@
 
 use std::marker::PhantomData;
 
-pub use type_proof_macros::nat;
+pub use type_proof_macros::N;
 
 /// A natural number (0, 1, 2, ...), encoded as a type.
 pub trait Nat {
@@ -245,10 +245,10 @@ mod tests {
 
     #[test]
     fn nat_macro() {
-        assert_type_eq::<nat!(0), N0>();
-        assert_type_eq::<nat!(4), N4>();
+        assert_type_eq::<N!(0), N0>();
+        assert_type_eq::<N!(4), N4>();
 
-        type N15Macro = nat!(15);
+        type N15Macro = N!(15);
         assert_eq!(N15Macro::VALUE, 15);
     }
 }

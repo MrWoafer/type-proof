@@ -12,14 +12,15 @@ use syn::{LitInt, parse_macro_input};
 ///
 /// ```
 /// use type_proof::{
-///     peano::{N3, nat},
+///     peano::{N, N3},
 ///     type_utils::assert_type_eq,
 /// };
 ///
-/// assert_type_eq::<nat!(3), N3>();
+/// assert_type_eq::<N!(3), N3>();
 /// ```
 #[proc_macro]
-pub fn nat(input: TokenStream) -> TokenStream {
+#[allow(non_snake_case)]
+pub fn N(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
     let value = input
         .base10_parse::<usize>()
@@ -51,7 +52,7 @@ pub fn nat(input: TokenStream) -> TokenStream {
 pub fn var(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
 
-    let nat = quote! { ::type_proof_macros::nat!(#input) };
+    let nat = quote! { ::type_proof_macros::N!(#input) };
     let output = quote! { ::type_proof::formula::Var<#nat> };
 
     TokenStream::from(output)
