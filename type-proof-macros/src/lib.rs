@@ -42,14 +42,15 @@ pub fn N(input: TokenStream) -> TokenStream {
 ///
 /// ```
 /// use type_proof::{
-///     formula::{P3, var},
+///     formula::{P, P3},
 ///     type_utils::assert_type_eq,
 /// };
 ///
-/// assert_type_eq::<var!(3), P3>();
+/// assert_type_eq::<P!(3), P3>();
 /// ```
 #[proc_macro]
-pub fn var(input: TokenStream) -> TokenStream {
+#[allow(non_snake_case)]
+pub fn P(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as LitInt);
 
     let nat = quote! { ::type_proof_macros::N!(#input) };

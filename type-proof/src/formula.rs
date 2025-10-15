@@ -25,7 +25,7 @@
 //!
 //! There are some predefined type aliases for [`Var<N>`] for the first few natural numbers - for example, [`P0`]
 //! is an alias for [`Var<N0>`]. Propositional variables with arbitrarily large indices can be created using the
-//! [`var!`] macro.
+//! [`P!`] macro.
 //!
 //! Some operators expressable in terms of `¬, ->` are defined via type aliases - for example, `∧` has the alias
 //! [`And<P, Q>`].
@@ -99,7 +99,7 @@ use crate::{
     peano::{N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, Nat},
 };
 
-pub use type_proof_macros::var;
+pub use type_proof_macros::P;
 
 /// A propositional formula, encoded as a type.
 pub trait Formula {
@@ -305,7 +305,7 @@ mod tests {
 
     #[test]
     fn var_macro() {
-        assert_type_eq::<var!(0), P0>();
-        assert_type_eq::<var!(3), P3>();
+        assert_type_eq::<P!(0), P0>();
+        assert_type_eq::<P!(3), P3>();
     }
 }
