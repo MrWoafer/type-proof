@@ -1,3 +1,11 @@
 [workspace]
 members = ["type-proof", "type-proof-macros"]
 resolver = "3"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/MrWoafer/type-proof"
+readme = "../README.md"
+keywords = ["propositional", "logic", "proof", "type-checked"]
+categories = ["mathematics"]
