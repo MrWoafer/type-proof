@@ -97,12 +97,14 @@ where
     M: Nat,
 = <N as AddImpl<M>>::Output;
 
-/// Does `Self + N`.
-#[doc(hidden)]
+/// Defines the value of `Self + N`.
+///
+/// Used to define the more convenient [`Add<N, M>`].
 pub trait AddImpl<N>
 where
     N: Nat,
 {
+    /// The value of `Self + N`.
     type Output: Nat;
 }
 
@@ -131,12 +133,14 @@ where
     M: Nat,
 = <N as MulImpl<M>>::Output;
 
-/// Does `Self * N`.
-#[doc(hidden)]
+/// Defines the value of `Self * N`.
+///
+/// Used to define the more convenient [`Mul<N, M>`].
 pub trait MulImpl<N>
 where
     N: Nat,
 {
+    /// The value of `Self * N`.
     type Output: Nat;
 }
 
@@ -168,12 +172,16 @@ where
     M: Nat,
 = <N as PowImpl<M>>::Output;
 
-/// Does `Self ^ N`.
-#[doc(hidden)]
+/// Defines the value of `Self ^ N`.
+///
+/// Note `0 ^ 0` is taken to be `1`.
+///
+/// Used to define the more convenient [`Pow<N, M>`].
 pub trait PowImpl<N>
 where
     N: Nat,
 {
+    /// The value of `Self ^ N`.
     type Output: Nat;
 }
 

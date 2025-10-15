@@ -49,7 +49,8 @@ where
     B: Bool,
 = <B as Bool>::NOT;
 
-/// Boolean implication.
+/// Boolean implication:
+/// `A -> B`
 #[allow(type_alias_bounds)]
 pub type Implies<A, B>
 where
@@ -57,12 +58,14 @@ where
     B: Bool,
 = <A as ImpliesImpl<B>>::Output;
 
-/// Does `Self -> B`.
-#[doc(hidden)]
+/// Defines the value of `Self -> B`.
+///
+/// Used to define the more convenient [`Implies<A, B>`].
 pub trait ImpliesImpl<B>
 where
     B: Bool,
 {
+    /// The value of `Self -> B`.
     type Output: Bool;
 }
 
@@ -82,7 +85,8 @@ impl ImpliesImpl<False> for False {
     type Output = True;
 }
 
-/// Boolean and.
+/// Boolean and:
+/// `A ∧ B`
 #[allow(type_alias_bounds)]
 pub type And<A, B>
 where
@@ -90,7 +94,8 @@ where
     B: Bool,
 = Not<Implies<A, Not<B>>>;
 
-/// Boolean or.
+/// Boolean or:
+/// `A ∨ B`
 #[allow(type_alias_bounds)]
 pub type Or<A, B>
 where
@@ -98,7 +103,8 @@ where
     B: Bool,
 = Not<And<Not<A>, Not<B>>>; // using De Morgan's laws
 
-/// Boolean xor.
+/// Boolean xor:
+/// `A ⊕ B`
 #[allow(type_alias_bounds)]
 pub type Xor<A, B>
 where
@@ -106,7 +112,8 @@ where
     B: Bool,
 = And<Or<A, B>, Not<And<A, B>>>;
 
-/// Boolean equivalence.
+/// Boolean equivalence:
+/// `A <-> B`, or equivalently, `A = B`
 #[allow(type_alias_bounds)]
 pub type Iff<A, B>
 where
