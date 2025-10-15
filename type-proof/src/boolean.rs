@@ -15,9 +15,12 @@
 //! ```
 
 /// A Boolean value, encoded as a type.
-pub trait Bool: NotImpl {
+pub trait Bool {
     /// The Boolean value as a [`bool`].
     const VALUE: bool;
+
+    /// The negation of the Boolean value.
+    type NOT: Bool;
 }
 
 /// The Boolean value True.
@@ -25,6 +28,8 @@ pub struct True {}
 
 impl Bool for True {
     const VALUE: bool = true;
+
+    type NOT = False;
 }
 
 /// The Boolean value False.
@@ -32,28 +37,17 @@ pub struct False {}
 
 impl Bool for False {
     const VALUE: bool = false;
+
+    type NOT = True;
 }
 
-/// Boolean negation.
+/// Boolean negation:
+/// `¬B`
 #[allow(type_alias_bounds)]
 pub type Not<B>
 where
     B: Bool,
-= <B as NotImpl>::Output;
-
-/// Does `¬Self`.
-#[doc(hidden)]
-pub trait NotImpl {
-    type Output: Bool;
-}
-
-impl NotImpl for True {
-    type Output = False;
-}
-
-impl NotImpl for False {
-    type Output = True;
-}
+= <B as Bool>::NOT;
 
 /// Boolean implication.
 #[allow(type_alias_bounds)]
