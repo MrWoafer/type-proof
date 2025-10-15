@@ -126,7 +126,9 @@ use std::marker::PhantomData;
 
 use crate::formula::{Formula, Implies, Not};
 
-/// A proof of [`Proof::Proves`].
+/// A sequence of statements that prove a formula.
+///
+/// See the [module documentation](self) for more info.
 pub trait Proof {
     /// The formula that this proof proves.
     type Proves: Formula;
