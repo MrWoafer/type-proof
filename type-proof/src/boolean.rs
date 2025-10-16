@@ -20,9 +20,13 @@ pub trait Bool {
     const VALUE: bool;
 
     /// The negation of the Boolean value.
+    ///
+    /// The type alias [`Not<B>`] is a nicer way to access this.
     type Not: Bool;
 
     /// The value of `Self -> B`.
+    ///
+    /// The type alias [`Implies<A, B>`] is a nicer way to access this.
     type Implies<B: Bool>: Bool;
 }
 

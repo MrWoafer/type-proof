@@ -36,16 +36,21 @@ pub trait Nat {
     const VALUE: usize;
 
     /// The value of `Self + N`.
+    ///
+    /// The type alias [`Add<N, M>`] is a nicer way to access this.
     type Add<N: Nat>: Nat;
 
     /// The value of `Self * N`.
+    ///
+    /// The type alias [`Mul<N, M>`] is a nicer way to access this.
     type Mul<N: Nat>: Nat;
 
     /// The value of `N ^ Self`.
     ///
     /// Note `0 ^ 0` is taken to be `1`.
     ///
-    /// Don't confuse with `Self ^ N`.
+    /// The type alias [`Pow<N, M>`] is a nicer way to access this. Note that this does `N ^ M`, which may be confusing
+    /// with this order of parameters in this associated type.
     type Pow<N: Nat>: Nat;
 }
 
