@@ -34,6 +34,9 @@ pub use type_proof_macros::N;
 pub trait Nat {
     /// The natural number as a [`usize`].
     const VALUE: usize;
+
+    /// The value of `Self + N`.
+    type Add<N: Nat>: Nat;
 }
 
 /// The successor of `N`, i.e. `N + 1`.
@@ -49,6 +52,8 @@ where
     N: Nat,
 {
     const VALUE: usize = N::VALUE + 1;
+
+    type Add<M: Nat> = Succ<N::Add<M>>;
 }
 
 /// The natural number 0.
@@ -56,6 +61,8 @@ pub struct N0 {}
 
 impl Nat for N0 {
     const VALUE: usize = 0;
+
+    type Add<N: Nat> = N;
 }
 
 /// The natural number 1.
@@ -95,34 +102,7 @@ pub type Add<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as AddImpl<M>>::Output;
-
-/// Defines the value of `Self + N`.
-///
-/// Used to define the more convenient [`Add<N, M>`].
-pub trait AddImpl<N>
-where
-    N: Nat,
-{
-    /// The value of `Self + N`.
-    type Output: Nat;
-}
-
-impl<N> AddImpl<N0> for N
-where
-    N: Nat,
-{
-    type Output = N;
-}
-
-impl<N, M> AddImpl<Succ<M>> for N
-where
-    N: Nat,
-    M: Nat,
-    N: AddImpl<M>,
-{
-    type Output = Succ<Add<N, M>>;
-}
+= <N as Nat>::Add<M>;
 
 /// Multiplication:
 /// `N * M`
@@ -156,7 +136,6 @@ where
     N: Nat,
     M: Nat,
     N: MulImpl<M>,
-    Mul<N, M>: AddImpl<N>,
 {
     type Output = Add<Mul<N, M>, N>;
 }
