@@ -21,6 +21,9 @@ pub trait Bool {
 
     /// The negation of the Boolean value.
     type Not: Bool;
+
+    /// The value of `Self -> B`.
+    type Implies<B: Bool>: Bool;
 }
 
 /// The Boolean value True.
@@ -30,6 +33,8 @@ impl Bool for True {
     const VALUE: bool = true;
 
     type Not = False;
+
+    type Implies<B: Bool> = B;
 }
 
 /// The Boolean value False.
@@ -39,6 +44,8 @@ impl Bool for False {
     const VALUE: bool = false;
 
     type Not = True;
+
+    type Implies<B: Bool> = True;
 }
 
 /// Boolean negation:
@@ -56,34 +63,7 @@ pub type Implies<A, B>
 where
     A: Bool,
     B: Bool,
-= <A as ImpliesImpl<B>>::Output;
-
-/// Defines the value of `Self -> B`.
-///
-/// Used to define the more convenient [`Implies<A, B>`].
-pub trait ImpliesImpl<B>
-where
-    B: Bool,
-{
-    /// The value of `Self -> B`.
-    type Output: Bool;
-}
-
-impl ImpliesImpl<True> for True {
-    type Output = True;
-}
-
-impl ImpliesImpl<False> for True {
-    type Output = False;
-}
-
-impl ImpliesImpl<True> for False {
-    type Output = True;
-}
-
-impl ImpliesImpl<False> for False {
-    type Output = True;
-}
+= <A as Bool>::Implies<B>;
 
 /// Boolean and:
 /// `A ∧ B`
