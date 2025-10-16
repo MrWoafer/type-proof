@@ -20,7 +20,7 @@ pub trait Bool {
     const VALUE: bool;
 
     /// The negation of the Boolean value.
-    type NOT: Bool;
+    type Not: Bool;
 }
 
 /// The Boolean value True.
@@ -29,7 +29,7 @@ pub struct True {}
 impl Bool for True {
     const VALUE: bool = true;
 
-    type NOT = False;
+    type Not = False;
 }
 
 /// The Boolean value False.
@@ -38,7 +38,7 @@ pub struct False {}
 impl Bool for False {
     const VALUE: bool = false;
 
-    type NOT = True;
+    type Not = True;
 }
 
 /// Boolean negation:
@@ -47,7 +47,7 @@ impl Bool for False {
 pub type Not<B>
 where
     B: Bool,
-= <B as Bool>::NOT;
+= <B as Bool>::Not;
 
 /// Boolean implication:
 /// `A -> B`
