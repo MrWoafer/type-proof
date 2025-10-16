@@ -40,6 +40,13 @@ pub trait Nat {
 
     /// The value of `Self * N`.
     type Mul<N: Nat>: Nat;
+
+    /// The value of `N ^ Self`.
+    ///
+    /// Note `0 ^ 0` is taken to be `1`.
+    ///
+    /// Don't confuse with `Self ^ N`.
+    type Pow<N: Nat>: Nat;
 }
 
 /// The successor of `N`, i.e. `N + 1`.
@@ -59,6 +66,8 @@ where
     type Add<M: Nat> = Succ<N::Add<M>>;
 
     type Mul<M: Nat> = <N::Mul<M> as Nat>::Add<M>;
+
+    type Pow<M: Nat> = <N::Pow<M> as Nat>::Mul<M>;
 }
 
 /// The natural number 0.
@@ -70,6 +79,8 @@ impl Nat for N0 {
     type Add<N: Nat> = N;
 
     type Mul<N: Nat> = N0;
+
+    type Pow<N: Nat> = N1;
 }
 
 /// The natural number 1.
@@ -129,36 +140,7 @@ pub type Pow<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as PowImpl<M>>::Output;
-
-/// Defines the value of `Self ^ N`.
-///
-/// Note `0 ^ 0` is taken to be `1`.
-///
-/// Used to define the more convenient [`Pow<N, M>`].
-pub trait PowImpl<N>
-where
-    N: Nat,
-{
-    /// The value of `Self ^ N`.
-    type Output: Nat;
-}
-
-impl<N> PowImpl<N0> for N
-where
-    N: Nat,
-{
-    type Output = N1;
-}
-
-impl<N, M> PowImpl<Succ<M>> for N
-where
-    N: Nat,
-    M: Nat,
-    N: PowImpl<M>,
-{
-    type Output = Mul<Pow<N, M>, N>;
-}
+= <M as Nat>::Pow<N>;
 
 #[cfg(test)]
 mod tests {
