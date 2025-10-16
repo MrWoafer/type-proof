@@ -37,6 +37,9 @@ pub trait Nat {
 
     /// The value of `Self + N`.
     type Add<N: Nat>: Nat;
+
+    /// The value of `Self * N`.
+    type Mul<N: Nat>: Nat;
 }
 
 /// The successor of `N`, i.e. `N + 1`.
@@ -54,6 +57,8 @@ where
     const VALUE: usize = N::VALUE + 1;
 
     type Add<M: Nat> = Succ<N::Add<M>>;
+
+    type Mul<M: Nat> = <N::Mul<M> as Nat>::Add<M>;
 }
 
 /// The natural number 0.
@@ -63,6 +68,8 @@ impl Nat for N0 {
     const VALUE: usize = 0;
 
     type Add<N: Nat> = N;
+
+    type Mul<N: Nat> = N0;
 }
 
 /// The natural number 1.
@@ -111,34 +118,7 @@ pub type Mul<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as MulImpl<M>>::Output;
-
-/// Defines the value of `Self * N`.
-///
-/// Used to define the more convenient [`Mul<N, M>`].
-pub trait MulImpl<N>
-where
-    N: Nat,
-{
-    /// The value of `Self * N`.
-    type Output: Nat;
-}
-
-impl<N> MulImpl<N0> for N
-where
-    N: Nat,
-{
-    type Output = N0;
-}
-
-impl<N, M> MulImpl<Succ<M>> for N
-where
-    N: Nat,
-    M: Nat,
-    N: MulImpl<M>,
-{
-    type Output = Add<Mul<N, M>, N>;
-}
+= <N as Nat>::Mul<M>;
 
 /// Exponentiation:
 /// `N ^ M`
@@ -176,7 +156,6 @@ where
     N: Nat,
     M: Nat,
     N: PowImpl<M>,
-    Pow<N, M>: MulImpl<N>,
 {
     type Output = Mul<Pow<N, M>, N>;
 }
