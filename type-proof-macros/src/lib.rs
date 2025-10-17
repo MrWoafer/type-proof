@@ -11,6 +11,8 @@
 )]
 
 //! Macros for the `type-proof` crate.
+//!
+//! The macros are re-exported in `type-proof`, so it's recommended to just use them through that.
 
 use proc_macro::TokenStream;
 use quote::quote;
