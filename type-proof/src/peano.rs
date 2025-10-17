@@ -34,6 +34,24 @@ pub use type_proof_macros::N;
 pub trait Nat {
     /// The natural number as a [`usize`].
     const VALUE: usize;
+
+    /// The value of `Self + N`.
+    ///
+    /// The type alias [`Add<N, M>`] is a nicer way to access this.
+    type Add<N: Nat>: Nat;
+
+    /// The value of `Self * N`.
+    ///
+    /// The type alias [`Mul<N, M>`] is a nicer way to access this.
+    type Mul<N: Nat>: Nat;
+
+    /// The value of `N ^ Self`.
+    ///
+    /// Note `0 ^ 0` is taken to be `1`.
+    ///
+    /// The type alias [`Pow<N, M>`] is a nicer way to access this. Note that this does `N ^ M`, which may be confusing
+    /// with this order of parameters in this associated type.
+    type Pow<N: Nat>: Nat;
 }
 
 /// The successor of `N`, i.e. `N + 1`.
@@ -49,6 +67,12 @@ where
     N: Nat,
 {
     const VALUE: usize = N::VALUE + 1;
+
+    type Add<M: Nat> = Succ<N::Add<M>>;
+
+    type Mul<M: Nat> = <N::Mul<M> as Nat>::Add<M>;
+
+    type Pow<M: Nat> = <N::Pow<M> as Nat>::Mul<M>;
 }
 
 /// The natural number 0.
@@ -56,6 +80,12 @@ pub struct N0 {}
 
 impl Nat for N0 {
     const VALUE: usize = 0;
+
+    type Add<N: Nat> = N;
+
+    type Mul<N: Nat> = N0;
+
+    type Pow<N: Nat> = N1;
 }
 
 /// The natural number 1.
@@ -95,34 +125,7 @@ pub type Add<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as AddImpl<M>>::Output;
-
-/// Defines the value of `Self + N`.
-///
-/// Used to define the more convenient [`Add<N, M>`].
-pub trait AddImpl<N>
-where
-    N: Nat,
-{
-    /// The value of `Self + N`.
-    type Output: Nat;
-}
-
-impl<N> AddImpl<N0> for N
-where
-    N: Nat,
-{
-    type Output = N;
-}
-
-impl<N, M> AddImpl<Succ<M>> for N
-where
-    N: Nat,
-    M: Nat,
-    N: AddImpl<M>,
-{
-    type Output = Succ<Add<N, M>>;
-}
+= <N as Nat>::Add<M>;
 
 /// Multiplication:
 /// `N * M`
@@ -131,35 +134,7 @@ pub type Mul<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as MulImpl<M>>::Output;
-
-/// Defines the value of `Self * N`.
-///
-/// Used to define the more convenient [`Mul<N, M>`].
-pub trait MulImpl<N>
-where
-    N: Nat,
-{
-    /// The value of `Self * N`.
-    type Output: Nat;
-}
-
-impl<N> MulImpl<N0> for N
-where
-    N: Nat,
-{
-    type Output = N0;
-}
-
-impl<N, M> MulImpl<Succ<M>> for N
-where
-    N: Nat,
-    M: Nat,
-    N: MulImpl<M>,
-    Mul<N, M>: AddImpl<N>,
-{
-    type Output = Add<Mul<N, M>, N>;
-}
+= <N as Nat>::Mul<M>;
 
 /// Exponentiation:
 /// `N ^ M`
@@ -170,37 +145,7 @@ pub type Pow<N, M>
 where
     N: Nat,
     M: Nat,
-= <N as PowImpl<M>>::Output;
-
-/// Defines the value of `Self ^ N`.
-///
-/// Note `0 ^ 0` is taken to be `1`.
-///
-/// Used to define the more convenient [`Pow<N, M>`].
-pub trait PowImpl<N>
-where
-    N: Nat,
-{
-    /// The value of `Self ^ N`.
-    type Output: Nat;
-}
-
-impl<N> PowImpl<N0> for N
-where
-    N: Nat,
-{
-    type Output = N1;
-}
-
-impl<N, M> PowImpl<Succ<M>> for N
-where
-    N: Nat,
-    M: Nat,
-    N: PowImpl<M>,
-    Pow<N, M>: MulImpl<N>,
-{
-    type Output = Mul<Pow<N, M>, N>;
-}
+= <M as Nat>::Pow<N>;
 
 #[cfg(test)]
 mod tests {

@@ -254,8 +254,6 @@ where
     P: Formula,
     Q: Formula,
     V: Valuation<P> + Valuation<Q>,
-    // This bound is needed because Rust doesn't know that only True and False implement Bool
-    <V as Valuation<P>>::Value: boolean::ImpliesImpl<<V as Valuation<Q>>::Value>,
 {
     type Value = boolean::Implies<<V as Valuation<P>>::Value, <V as Valuation<Q>>::Value>;
 }

@@ -20,7 +20,14 @@ pub trait Bool {
     const VALUE: bool;
 
     /// The negation of the Boolean value.
-    type NOT: Bool;
+    ///
+    /// The type alias [`Not<B>`] is a nicer way to access this.
+    type Not: Bool;
+
+    /// The value of `Self -> B`.
+    ///
+    /// The type alias [`Implies<A, B>`] is a nicer way to access this.
+    type Implies<B: Bool>: Bool;
 }
 
 /// The Boolean value True.
@@ -29,7 +36,9 @@ pub struct True {}
 impl Bool for True {
     const VALUE: bool = true;
 
-    type NOT = False;
+    type Not = False;
+
+    type Implies<B: Bool> = B;
 }
 
 /// The Boolean value False.
@@ -38,7 +47,9 @@ pub struct False {}
 impl Bool for False {
     const VALUE: bool = false;
 
-    type NOT = True;
+    type Not = True;
+
+    type Implies<B: Bool> = True;
 }
 
 /// Boolean negation:
@@ -47,7 +58,7 @@ impl Bool for False {
 pub type Not<B>
 where
     B: Bool,
-= <B as Bool>::NOT;
+= <B as Bool>::Not;
 
 /// Boolean implication:
 /// `A -> B`
@@ -56,34 +67,7 @@ pub type Implies<A, B>
 where
     A: Bool,
     B: Bool,
-= <A as ImpliesImpl<B>>::Output;
-
-/// Defines the value of `Self -> B`.
-///
-/// Used to define the more convenient [`Implies<A, B>`].
-pub trait ImpliesImpl<B>
-where
-    B: Bool,
-{
-    /// The value of `Self -> B`.
-    type Output: Bool;
-}
-
-impl ImpliesImpl<True> for True {
-    type Output = True;
-}
-
-impl ImpliesImpl<False> for True {
-    type Output = False;
-}
-
-impl ImpliesImpl<True> for False {
-    type Output = True;
-}
-
-impl ImpliesImpl<False> for False {
-    type Output = True;
-}
+= <A as Bool>::Implies<B>;
 
 /// Boolean and:
 /// `A ∧ B`
