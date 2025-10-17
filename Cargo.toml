@@ -1,0 +1,2 @@
+[workspace]
+members = ["type-proof", "type-proof-macros"]
