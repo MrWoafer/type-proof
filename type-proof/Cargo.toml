@@ -10,4 +10,4 @@ keywords.workspace = true
 categories.workspace = true
 
 [dependencies]
-type-proof-macros = { path = "../type-proof-macros" }
+type-proof-macros = { path = "../type-proof-macros", version = "0.1.0" }
