@@ -1,3 +1,5 @@
+![CI](https://github.com/MrWoafer/type-proof/actions/workflows/ci.yml/badge.svg)
+
 # type-proof
 
 A Rust crate for type-checked [propositional logic](https://en.wikipedia.org/wiki/Propositional_logic) proofs.
