@@ -18,6 +18,7 @@ jobs:
         profile: [dev, release]
     steps:
     - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
     - name: Build
       run: cargo build --profile ${{ matrix.profile }} --verbose
 
@@ -29,6 +30,7 @@ jobs:
         profile: [dev, release]
     steps:
     - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
     - name: Run tests
       run: cargo test --profile ${{ matrix.profile }} --verbose
 
@@ -37,6 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
     - name: Build docs
       run: cargo doc --no-deps --all-features --verbose
 
@@ -45,6 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
     - name: Check formatting
       run: cargo fmt --all --check --verbose
 
@@ -53,6 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
     - name: Run Clippy
       run: cargo clippy --all-targets --all-features --verbose
 
