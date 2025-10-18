@@ -1,4 +1,6 @@
 ![CI](https://github.com/MrWoafer/type-proof/actions/workflows/ci.yml/badge.svg)
+![Crates.io Version](https://img.shields.io/crates/v/type-proof?label=crates.io)
+![docs.rs](https://img.shields.io/docsrs/type-proof?label=docs.rs)
 
 # type-proof
 
