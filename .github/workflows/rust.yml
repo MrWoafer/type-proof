@@ -12,17 +12,23 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        profile: [dev, release]
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --profile ${{ matrix.profile }} --verbose
   tests:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        profile: [dev, release]
     steps:
     - uses: actions/checkout@v4
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --profile ${{ matrix.profile }} --verbose
   docs:
     needs: build
     runs-on: ubuntu-latest
