@@ -6,6 +6,6 @@ resolver = "3"
 edition = "2024"
 license = "MIT"
 repository = "https://github.com/MrWoafer/type-proof"
-readme = "../README.md"
+readme = "./README.md"
 keywords = ["propositional", "logic", "proof", "type-checked"]
 categories = ["mathematics"]
