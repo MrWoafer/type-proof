@@ -112,6 +112,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(clippy::bool_assert_comparison)]
     fn value() {
         assert_eq!(True::VALUE, true);
         assert_eq!(False::VALUE, false);

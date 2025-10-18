@@ -7,9 +7,9 @@
     rustdoc::invalid_html_tags,
     rustdoc::invalid_rust_codeblocks,
     rustdoc::bare_urls,
-    rustdoc::unescaped_backticks
+    rustdoc::unescaped_backticks,
+    missing_docs
 )]
-#![warn(missing_docs)]
 
 //! A Rust crate for type-checked [propositional logic](https://en.wikipedia.org/wiki/Propositional_logic) proofs.
 //!

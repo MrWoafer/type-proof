@@ -1,4 +1,16 @@
-//! Macros for the [`type_proof`] crate.
+#![deny(
+    rustdoc::broken_intra_doc_links,
+    rustdoc::private_intra_doc_links,
+    rustdoc::missing_crate_level_docs,
+    rustdoc::invalid_codeblock_attributes,
+    rustdoc::invalid_html_tags,
+    rustdoc::invalid_rust_codeblocks,
+    rustdoc::bare_urls,
+    rustdoc::unescaped_backticks,
+    missing_docs
+)]
+
+//! Macros for the `type-proof` crate.
 
 use proc_macro::TokenStream;
 use quote::quote;

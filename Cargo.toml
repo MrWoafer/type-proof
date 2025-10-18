@@ -1,2 +1,3 @@
 [workspace]
 members = ["type-proof", "type-proof-macros"]
+resolver = "3"

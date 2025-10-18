@@ -36,7 +36,7 @@
 //! A proof of a formula `P` is a sequence of statements where:
 //! - Each statement is of the form `⊢ Q` for some formula `Q`.
 //! - Each statement is either an axiom or follows from two previous statements (not necessarily immediately
-//! previous) via modus ponens.
+//!   previous) via modus ponens.
 //! - The final statement is `⊢ P`.
 //!
 //! This is represented by the trait [`Proof`]. A valid proof of a [`Formula`] `P` will implement [`Proof`] with
