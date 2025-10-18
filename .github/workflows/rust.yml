@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
-    - name: Build
+    - name: Build crates
       run: cargo build --profile ${{ matrix.profile }} --verbose
 
   tests:
