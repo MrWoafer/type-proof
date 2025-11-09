@@ -30,10 +30,18 @@ use std::marker::PhantomData;
 
 pub use type_proof_macros::N;
 
+use crate::boolean::{Bool, False, True};
+
 /// A natural number (0, 1, 2, ...), encoded as a type.
 pub trait Nat {
     /// The natural number as a [`usize`].
     const VALUE: usize;
+
+    type IsZero: Bool;
+
+    type IsOne: Bool;
+
+    type Equals<N: Nat>: Bool;
 
     /// The value of `Self + N`.
     ///
@@ -52,6 +60,8 @@ pub trait Nat {
     /// The type alias [`Pow<N, M>`] is a nicer way to access this. Note that this does `N ^ M`, which may be confusing
     /// with this order of parameters in this associated type.
     type Pow<N: Nat>: Nat;
+
+    type SaturatingPred: Nat;
 }
 
 /// The successor of `N`, i.e. `N + 1`.
@@ -68,11 +78,19 @@ where
 {
     const VALUE: usize = N::VALUE + 1;
 
+    type IsZero = False;
+
+    type IsOne = N::IsZero;
+
+    type Equals<M: Nat> = <M::IsZero as Bool>::If<False, N::Equals<M::SaturatingPred>>;
+
     type Add<M: Nat> = Succ<N::Add<M>>;
 
     type Mul<M: Nat> = <N::Mul<M> as Nat>::Add<M>;
 
     type Pow<M: Nat> = <N::Pow<M> as Nat>::Mul<M>;
+
+    type SaturatingPred = <Self::IsOne as Bool>::IfNat<N0, Succ<N::SaturatingPred>>;
 }
 
 /// The natural number 0.
@@ -81,11 +99,19 @@ pub struct N0 {}
 impl Nat for N0 {
     const VALUE: usize = 0;
 
+    type IsZero = True;
+
+    type IsOne = False;
+
+    type Equals<N: Nat> = N::IsZero;
+
     type Add<N: Nat> = N;
 
     type Mul<N: Nat> = N0;
 
     type Pow<N: Nat> = N1;
+
+    type SaturatingPred = N0;
 }
 
 /// The natural number 1.
@@ -147,6 +173,23 @@ where
     M: Nat,
 = <M as Nat>::Pow<N>;
 
+/// Saturating subtraction:
+/// `N - 1` if `N >= 1`, else `0`
+#[allow(type_alias_bounds)]
+pub type SaturatingPred<N>
+where
+    N: Nat,
+= <N as Nat>::SaturatingPred;
+
+/// Equality:
+/// `N = M`
+#[allow(type_alias_bounds)]
+pub type Equals<N, M>
+where
+    N: Nat,
+    M: Nat,
+= <N as Nat>::Equals<M>;
+
 #[cfg(test)]
 mod tests {
     use crate::type_utils::assert_type_eq;
@@ -195,5 +238,35 @@ mod tests {
 
         type N15Macro = N!(15);
         assert_eq!(N15Macro::VALUE, 15);
+    }
+
+    #[test]
+    fn saturating_pred() {
+        assert_type_eq::<N0, SaturatingPred<N0>>();
+        assert_type_eq::<N0, SaturatingPred<N1>>();
+        assert_type_eq::<N1, SaturatingPred<N2>>();
+        assert_type_eq::<N2, SaturatingPred<N3>>();
+    }
+
+    #[test]
+    fn equals() {
+        assert_type_eq::<True, Equals<N0, N0>>();
+        assert_type_eq::<False, Equals<N0, N1>>();
+        assert_type_eq::<False, Equals<N0, N2>>();
+
+        assert_type_eq::<False, Equals<N1, N0>>();
+        assert_type_eq::<True, Equals<N1, N1>>();
+        assert_type_eq::<False, Equals<N1, N2>>();
+
+        assert_type_eq::<False, Equals<N2, N0>>();
+        assert_type_eq::<False, Equals<N2, N1>>();
+        assert_type_eq::<True, Equals<N2, N2>>();
+        assert_type_eq::<False, Equals<N2, N3>>();
+
+        assert_type_eq::<False, Equals<N3, N0>>();
+        assert_type_eq::<False, Equals<N3, N1>>();
+        assert_type_eq::<False, Equals<N3, N2>>();
+        assert_type_eq::<True, Equals<N3, N3>>();
+        assert_type_eq::<False, Equals<N3, N4>>();
     }
 }

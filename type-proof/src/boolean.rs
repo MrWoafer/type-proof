@@ -14,6 +14,8 @@
 //! assert_type_eq::<And<False, True>, False>();
 //! ```
 
+use crate::peano::Nat;
+
 /// A Boolean value, encoded as a type.
 pub trait Bool {
     /// The Boolean value as a [`bool`].
@@ -28,6 +30,10 @@ pub trait Bool {
     ///
     /// The type alias [`Implies<A, B>`] is a nicer way to access this.
     type Implies<B: Bool>: Bool;
+
+    type If<T: Bool, F: Bool>: Bool;
+
+    type IfNat<T: Nat, F: Nat>: Nat;
 }
 
 /// The Boolean value True.
@@ -39,6 +45,10 @@ impl Bool for True {
     type Not = False;
 
     type Implies<B: Bool> = B;
+
+    type If<T: Bool, F: Bool> = T;
+
+    type IfNat<T: Nat, F: Nat> = T;
 }
 
 /// The Boolean value False.
@@ -50,6 +60,10 @@ impl Bool for False {
     type Not = True;
 
     type Implies<B: Bool> = True;
+
+    type If<T: Bool, F: Bool> = F;
+
+    type IfNat<T: Nat, F: Nat> = F;
 }
 
 /// Boolean negation:
